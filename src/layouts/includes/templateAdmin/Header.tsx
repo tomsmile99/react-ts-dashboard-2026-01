@@ -49,7 +49,7 @@ const Header = ({ collapsed, setCollapsed, setMobileOpen }: HeaderProps) => {
   };
 
   return (
-    <header className="bg-blue-100 px-2 py-2 shadow-[0_2px_10px_rgba(15,23,42,0.08)] sm:px-4 lg:px-4 dark:bg-slate-900 dark:text-white">
+    <header className="bg-blue-100 px-2 py-2 shadow-[0_2px_10px_rgba(15,23,42,0.18)] sm:px-4 lg:px-4 dark:bg-slate-900 dark:text-white">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button

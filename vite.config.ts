@@ -20,9 +20,9 @@ export default defineConfig({
       }
     }
   },
-  base: 'http://127.0.0.1:3006/',
-  // server: {
-  //   host: '127.0.0.1',
-  //   port: 3005
-  // }
+  //base : 'https://insurance.sakerp.org/', //Production
+  server: {
+    host: '127.0.0.1',
+    port: 3006
+  }
 })
