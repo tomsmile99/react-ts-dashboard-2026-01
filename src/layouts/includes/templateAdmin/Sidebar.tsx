@@ -1,6 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
 import {
   LayoutDashboard,
   UserCog,
@@ -10,11 +9,16 @@ import {
   FileText,
   CalendarDays,
   ChevronDown,
-  Circle
-} from "lucide-react"
+  Circle,
+  X,
+} from "lucide-react";
 
 type SidebarProps = {
   collapsed: boolean;
+  mobileOpen: boolean;
+  setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  hoverExpanded: boolean;
+  setHoverExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type SubMenuItem = {
@@ -31,11 +35,7 @@ type MenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  {
-    name: "Dashboard",
-    path: "/Admin/DashBoard",
-    icon: LayoutDashboard,
-  },
+  { name: "Dashboard", path: "/Admin/DashBoard", icon: LayoutDashboard },
   {
     name: "จัดการระบบ",
     icon: UserCog,
@@ -55,11 +55,18 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-const Sidebar = ({ collapsed }: SidebarProps) => {
+const Sidebar = ({
+  collapsed,
+  mobileOpen,
+  setMobileOpen,
+  hoverExpanded,
+  setHoverExpanded,
+}: SidebarProps) => {
   const location = useLocation();
-
-  // เก็บเฉพาะสถานะเปิด/ปิดจากการคลิกของ user
   const [manualOpen, setManualOpen] = useState<Record<string, boolean>>({});
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const expanded = !collapsed || hoverExpanded || mobileOpen;
 
   const routeOpenMenus = menuItems.reduce((acc, item) => {
     if (item.children?.some((child) => location.pathname.startsWith(child.path))) {
@@ -73,178 +80,303 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
   };
 
   const toggleMenu = (menuName: string) => {
-    setManualOpen((prev) => ({
-      ...prev,
-      [menuName]: !isMenuOpen({ name: menuName, children: menuItems.find(i => i.name === menuName)?.children }),
-    }));
+    setManualOpen((prev) => {
+      const current = prev[menuName] ?? routeOpenMenus[menuName] ?? false;
+
+      return {
+        ...prev,
+        [menuName]: !current,
+      };
+    });
   };
 
   const handleNavigate = () => {
     setManualOpen({});
-  }
+    setMobileOpen(false);
+  };
 
-  // เช็กว่า path ปัจจุบันอยู่ใน submenu ของ menu นี้หรือไม่
   const isParentActive = (item: MenuItem) => {
-    return item.children?.some((child) =>
-      location.pathname.startsWith(child.path)
-    ) ?? false;
+    return item.children?.some((child) => location.pathname.startsWith(child.path)) ?? false;
+  };
+
+  const showText = expanded;
+  const showChevron = showText;
+
+  const handleMouseEnter = () => {
+    if (!collapsed || mobileOpen) return;
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
+    setHoverExpanded(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!collapsed || mobileOpen) return;
+
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoverExpanded(false);
+    }, 120);
   };
 
   return (
-    <aside
-      className={`hidden min-h-screen flex-col border-r border-slate-200 bg-white text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-white lg:flex transition-all duration-300 ${
-        collapsed ? "w-24" : "w-72"
-      }`}
-    >
-      <div className="px-5 py-5 dark:border-slate-800">
-        {collapsed ? (
-          <div className="flex justify-center">
-            <div className="flex items-center justify-center text-sm font-bold text-white bg-blue-600 shadow-md h-11 w-11 rounded-2xl">
-              S
-            </div>
-          </div>
-        ) : (
+    <>
+      <div
+        onClick={() => setMobileOpen(false)}
+        className={`fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-300 lg:hidden ${
+          mobileOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+      />
+      <aside
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col bg-white text-slate-800 dark:bg-slate-900 dark:text-white transition-all duration-300 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
+          expanded ? "lg:w-58" : "lg:w-24"
+        } ${
+          mobileOpen ? "translate-x-0 w-72" : "-translate-x-full w-72"
+        }`}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 lg:hidden">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 text-base font-bold text-white bg-blue-600 shadow-md rounded-2xl">
-              S
+            <div className="flex items-center justify-center w-10 h-10 text-sm font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
+              <span className="text-xl">S</span>
             </div>
-
             <div>
-              <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-white">
                 SAK Dashboard
               </h3>
-              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-300">
                 ระบบบริหารจัดการข้อมูล
               </p>
             </div>
           </div>
-        )}
-      </div>
 
-      <nav className="flex-1 px-2 py-3 overflow-y-auto sidebar-scroll">
-        <div className="space-y-2">
-          {menuItems.map((item) => {
-            // ===== เมนูธรรมดา =====
-            if (!item.children) {
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-              const Icon = item.icon
+        <div className="hidden px-4 py-3 lg:block">
+          {expanded ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 text-base font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
+                <span className="text-2xl">S</span>
+              </div>
+
+              <div>
+                <h3 className="flex justify-start text-sm font-bold text-slate-800 dark:text-white">
+                  SAK Dashboard
+                </h3>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-white justify-start flex">
+                  ระบบบริหารจัดการข้อมูล
+                </p>
+                <hr />
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <div className="flex items-center justify-center w-12 h-12 text-sm font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
+                <span className="text-2xl">S</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <nav className="flex-1 min-h-0 px-2 py-3 overflow-y-auto sidebar-scroll">
+          <div className="space-y-1">
+            {menuItems.map((item) => {
+              if (!item.children) {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.path}
+                    to={item.path!}
+                    onClick={handleNavigate}
+                    title={!showText ? item.name : ""}
+                    className={({ isActive }) =>
+                      showText
+                        ? `group flex items-center rounded-2xl px-3 py-3 text-sm font-medium transition cursor-pointer ${
+                            isActive
+                              ? "text-blue-400 bg-blue-100 shadow-sm"
+                              : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                          }`
+                        : "group flex items-center justify-center rounded-2xl text-sm font-medium transition cursor-pointer"
+                    }
+                  >
+                    {showText ? (
+                      <>
+                        {Icon && <Icon className="w-5 h-5 mr-2 transition shrink-0" />}
+                        <span>{item.name}</span>
+                      </>
+                    ) : (
+                      <div
+                        className={`flex items-center justify-center w-12 h-12 rounded-2xl transition ${
+                          location.pathname === item.path
+                            ? "bg-blue-100 text-blue-400 shadow-sm"
+                            : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        {Icon && <Icon className="w-5 h-5 transition shrink-0" />}
+                      </div>
+                    )}
+                  </NavLink>
+                );
+              }
+
+              const parentActive = isParentActive(item);
+              const menuOpen = isMenuOpen(item);
+              const ParentIcon = item.icon;
 
               return (
-                <NavLink
-                  key={item.path}
-                  to={item.path!}
-                  onClick={handleNavigate}
-                  className={({ isActive }) =>
-                    `flex items-center rounded-2xl px-3 py-2 text-sm font-medium transition cursor-pointer ${
-                      collapsed ? "justify-center" : "justify-start"
-                    } ${
-                      isActive
-                        ? "bg-blue-500 text-white shadow-sm"
-                        : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-                    }`
-                  }
-                >
-                  {Icon && (
-                    <Icon className="w-4 h-4 mr-1 transition shrink-0 group-hover:scale-105" />
-                  )} <span>{collapsed ? item.name.charAt(0) : item.name}</span>
-                </NavLink>
-              );
-            }
+                <div key={item.name} className="space-y-1">
 
-            // ===== เมนูที่มี submenu =====
-            const parentActive = isParentActive(item);
-            const menuOpen = isMenuOpen(item);
-            const ParentIcon = item.icon;
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!showText) return;
+                      toggleMenu(item.name);
+                    }}
+                    title={!showText ? item.name : ""}
+                    className={
+                      showText
+                        ? `cursor-pointer group flex w-full items-center justify-between rounded-2xl px-3 py-3 text-sm font-medium transition ${
+                            parentActive
+                              ? "text-blue-400 bg-blue-100 shadow-sm"
+                              : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                          }`
+                        : "cursor-pointer group flex w-full items-center justify-center rounded-2xl text-sm font-medium transition"
+                    }
+                  >
+                    {showText ? (
+                      <>
+                        <div className="flex items-center gap-3">
+                          {ParentIcon && (
+                            <ParentIcon className="w-5 h-5 transition shrink-0 group-hover:scale-105" />
+                          )}
+                          <span className="truncate">{item.name}</span>
+                        </div>
 
-            return (
-              <div key={item.name} className="space-y-1">
-                <button
-                  type="button"
-                  onClick={() => toggleMenu(item.name)}
-                  className={`cursor-pointer group flex w-full items-center rounded-2xl px-3 py-1.5 text-sm font-medium transition ${
-                    collapsed ? "justify-center" : "justify-between"
-                  } ${
-                    parentActive
-                      ? "bg-blue-500 text-white shadow-sm"
-                      : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-                  }`}
-                >
-                  <div className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
-                    {ParentIcon && (
-                      <ParentIcon className="w-4 h-4 transition shrink-0 group-hover:scale-105" />
+                        {showChevron && (
+                          <ChevronDown
+                            className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
+                              menuOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div
+                        className={`flex items-center justify-center w-12 h-12 rounded-2xl transition ${
+                          parentActive
+                            ? "bg-blue-100 text-blue-400 shadow-sm"
+                            : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        {ParentIcon && (
+                          <ParentIcon className="w-5 h-5 transition shrink-0 group-hover:scale-105" />
+                        )}
+                      </div>
                     )}
+                  </button>
 
-                    {!collapsed && <span className="truncate">{item.name}</span>}
-                  </div>
 
-                  {!collapsed && (
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
-                        menuOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </button>
-
-                {!collapsed && (
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      menuOpen
-                        ? "mt-1 max-h-96 opacity-100 translate-y-0"
-                        : "max-h-0 opacity-0 -translate-y-1"
+                  {/* <button
+                    type="button"
+                    onClick={() => {
+                      if (!showText) return;
+                      toggleMenu(item.name);
+                    }}
+                    title={!showText ? item.name : ""}
+                    className={`cursor-pointer group flex w-full items-center rounded-2xl px-3 py-3 text-sm font-medium transition ${
+                      showText ? "justify-between" : "justify-center"
+                    } ${
+                      parentActive
+                        ? "text-blue-400 bg-blue-100 shadow-sm"
+                        : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                     }`}
                   >
-                    <div className="space-y-1">
-                      {item.children.map((child) => {
-                        const childActive = location.pathname === child.path;
-                        const ChildIcon = child.icon;
+                    <div className={`flex items-center ${showText ? "gap-3" : "w-full justify-center"}`}>
+                      {ParentIcon && (
+                        <ParentIcon className="w-5 h-5 transition shrink-0 group-hover:scale-105" />
+                      )}
 
-                        return (
-                          <NavLink
-                            key={child.path}
-                            to={child.path}
-                            onClick={handleNavigate}
-                            className="flex items-center gap-3 px-4 py-1.5 text-sm transition group rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800"
-                          >
-                            {ChildIcon ? (
-                              <ChildIcon
-                                className={`h-4 w-4 shrink-0 ${
-                                  childActive
-                                    ? "text-blue-500"
-                                    : "text-slate-500 dark:text-slate-400"
-                                }`}
-                              />
-                            ) : (
-                              <Circle
-                                className={`h-3.5 w-3.5 shrink-0 ${
-                                  childActive
-                                    ? "fill-blue-500 text-blue-500"
-                                    : "text-slate-400"
-                                }`}
-                              />
-                            )}
-
-                            <span
-                              className={`font-medium ${
-                                childActive
-                                  ? "text-blue-500"
-                                  : "text-slate-700 dark:text-slate-300"
-                              }`}
-                            >
-                              {child.name}
-                            </span>
-                          </NavLink>
-                        );
-                      })}
+                      {showText && <span className="truncate">{item.name}</span>}
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </nav>
-    </aside>
+
+                    {showChevron && (
+                      <ChevronDown
+                        className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
+                          menuOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    )}
+                  </button> */}
+
+                  {showText && (
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        menuOpen
+                          ? "mt-1 max-h-96 opacity-100 translate-y-0"
+                          : "max-h-0 opacity-0 -translate-y-1"
+                      }`}
+                    >
+                      <div className="space-y-1">
+                        {item.children.map((child) => {
+                          const childActive = location.pathname === child.path;
+                          const ChildIcon = child.icon;
+
+                          return (
+                            <NavLink
+                              key={child.path}
+                              to={child.path}
+                              onClick={handleNavigate}
+                              className="flex items-center gap-3 px-4 py-2 text-sm transition group rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800"
+                            >
+                              {ChildIcon ? (
+                                <ChildIcon
+                                  className={`h-4 w-4 shrink-0 ${
+                                    childActive
+                                      ? "text-blue-400"
+                                      : "text-slate-500 dark:text-slate-400"
+                                  }`}
+                                />
+                              ) : (
+                                <Circle
+                                  className={`h-3.5 w-3.5 shrink-0 ${
+                                    childActive
+                                      ? "fill-blue-400 text-blue-500"
+                                      : "text-slate-400"
+                                  }`}
+                                />
+                              )}
+
+                              <span
+                                className={`font-medium ${
+                                  childActive
+                                    ? "text-blue-400"
+                                    : "text-slate-700 dark:text-slate-300"
+                                }`}
+                              >
+                                {child.name}
+                              </span>
+                            </NavLink>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </nav>
+      </aside>
+    </>
   );
 };
 

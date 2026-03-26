@@ -1,9 +1,13 @@
+import { useState, useEffect } from "react";
+import { Moon, Sun, Menu } from "lucide-react";
 
-import { useState, useEffect } from "react"
+type HeaderProps = {
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const Header = () => {
-
-  // 🌗 Dark Mode Hook
+const Header = ({ collapsed, setCollapsed, setMobileOpen }: HeaderProps) => {
   function useDarkMode() {
     const [dark, setDark] = useState(false);
 
@@ -16,51 +20,68 @@ const Header = () => {
     }, []);
 
     const toggle = () => {
-      setDark(!dark);
-      if (!dark) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
+      setDark((prev) => {
+        const next = !prev;
+
+        if (next) {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
+
+        return next;
+      });
     };
 
     return { dark, toggle };
   }
 
-  const { dark, toggle } = useDarkMode()
+  const { dark, toggle } = useDarkMode();
+
+  const handleMenuClick = () => {
+    if (window.innerWidth < 1024) {
+      setMobileOpen(true);
+    } else {
+      setCollapsed((prev) => !prev);
+    }
+  };
 
   return (
-    <>
-       <header className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:px-8 dark:bg-slate-900 dark:text-white">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <header className="bg-blue-100 px-2 py-2 shadow-[0_2px_10px_rgba(15,23,42,0.08)] sm:px-4 lg:px-4 dark:bg-slate-900 dark:text-white">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleMenuClick}
+            className="flex items-center justify-center w-10 h-10 transition cursor-pointer rounded-xl text-slate-800 hover:bg-white/50 dark:text-white dark:hover:bg-slate-800"
+            title={collapsed ? "ขยายเมนู" : "ย่อเมนู"}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
           <div>
-            <h2 className="text-2xl font-bold text-slate-800! dark:text-white!">
+            <h3 className="flex justify-start text-base font-bold text-slate-800 dark:text-white">
               Dashboard Overview
-            </h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-white">
+            </h3>
+            <p className="flex justify-start mt-1 text-sm text-slate-500 dark:text-slate-300">
               ภาพรวมข้อมูลการขายและสถานะงานของวันนี้
             </p>
           </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="text"
-              placeholder="ค้นหาสาขา / ผู้ใช้งาน"
-              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:w-72 dark:text-white"
-            />
-            <button
-              onClick={toggle}
-              className="px-3 py-2 rounded-lg bg-slate-900 text-white text-sm"
-            >
-              {dark ? "☀️ Light" : "🌙 Dark"}
-            </button>
-          </div>
         </div>
-      </header>
-    </>
-  )
-}
 
-export default Header
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggle}
+            className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer text-slate-800 bg-slate-50 dark:border-slate-700 dark:bg-slate-100 dark:text-slate-400"
+          >
+            {dark ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
