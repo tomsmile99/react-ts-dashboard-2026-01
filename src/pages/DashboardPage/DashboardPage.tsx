@@ -1,4 +1,6 @@
 
+import { LayoutDashboard } from "lucide-react"
+
 type StatCardProps = {
   title : string;
   value : string;
@@ -7,7 +9,7 @@ type StatCardProps = {
 
 function StatCard({ title, value, subtitle }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md dark:bg-slate-900 dark:text-white">
+    <div className="p-5 transition bg-white border shadow-sm rounded-2xl border-slate-200 hover:shadow-md dark:bg-slate-900 dark:text-white">
       <p className="text-sm font-medium text-slate-500 dark:text-white">{title}</p>
       <h3 className="mt-3 text-3xl font-bold tracking-tight text-slate-800 dark:text-white">{value}</h3>
       <p className="mt-2 text-sm text-slate-400 dark:text-white">{subtitle}</p>
@@ -51,38 +53,62 @@ const DashboardPage = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 dark:text-white">
+      <div className="w-full pb-2">
+        <div className="flex items-center justify-between w-full p-1 bg-blue-100 rounded-xl shadow-[0_2px_10px_rgba(15,23,42,0.08)]">
+          {/* ฝั่งซ้าย */}
+          <div>
+            <span className="flex justify-start p-3 text-2xl text-gray-800">
+              Dashboard
+            </span>
+            <div className="mb-3 ml-3 text-sm text-gray-500">
+              <span className="cursor-pointer hover:text-blue-500">
+                ระบบบริหารจัดการข้อมูล
+              </span>
+              <span className="mx-2 text-sm">•</span>
+              <span className="text-gray-700">
+                Dashboard
+              </span>
+            </div>
+          </div>
+          {/* ฝั่งขวา */}
+          <div className="mr-5">
+            <LayoutDashboard size={64}/>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 mt-3 md:grid-cols-2 xl:grid-cols-4 dark:text-white">
         <StatCard title="ยอดเบี้ยรวม" value="฿1,245,000" subtitle="อัปเดตล่าสุด 10:30 น." />
         <StatCard title="จำนวนกรมธรรม์" value="440" subtitle="เพิ่มขึ้นจากเมื่อวาน 12%" />
         <StatCard title="รายได้ค่าคอมมิชชั่น" value="฿164,200" subtitle="คิดจากยอดสุทธิทั้งหมด" />
         <StatCard title="งานรอดำเนินการ" value="28" subtitle="รอตรวจสอบจากเจ้าหน้าที่" />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3 ">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm xl:col-span-2 dark:bg-slate-900 dark:text-white">
+      <div className="grid grid-cols-1 gap-6 mt-6 xl:grid-cols-3 ">
+        <div className="p-5 bg-white border shadow-sm rounded-2xl border-slate-200 xl:col-span-2 dark:bg-slate-900 dark:text-white">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-slate-800 dark:text-white">ยอดขายรายเดือน</h3>
               <p className="mt-1 text-sm text-slate-500 dark:text-white">ตัวอย่างพื้นที่สำหรับใส่กราฟในอนาคต</p>
             </div>
-            <select className="rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500">
+            <select className="px-3 py-2 text-sm border outline-none rounded-xl border-slate-300 focus:border-blue-500">
               <option>ปี 2569</option>
               <option>ปี 2570</option>
             </select>
           </div>
 
-          <div className="mt-6 flex h-80 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+          <div className="flex items-center justify-center mt-6 border border-dashed h-80 rounded-2xl border-slate-300 bg-slate-50 text-slate-400">
             Chart Area
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-900 dark:text-white">
+        <div className="p-5 bg-white border shadow-sm rounded-2xl border-slate-200 dark:bg-slate-900 dark:text-white">
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white">สัดส่วนงาน</h3>
           <p className="mt-1 text-sm text-slate-500 dark:text-white">สรุปสถานะงานโดยรวม</p>
 
           <div className="mt-6 space-y-4">
             <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between mb-2 text-sm">
                 <span className="text-slate-600 dark:text-white">สำเร็จ</span>
                 <span className="font-semibold text-slate-800 dark:text-white">68%</span>
               </div>
@@ -92,7 +118,7 @@ const DashboardPage = () => {
             </div>
 
             <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between mb-2 text-sm">
                 <span className="text-slate-600 dark:text-white">รอตรวจสอบ</span>
                 <span className="font-semibold text-slate-800 dark:text-white">21%</span>
               </div>
@@ -102,7 +128,7 @@ const DashboardPage = () => {
             </div>
 
             <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between mb-2 text-sm">
                 <span className="text-slate-600 dark:text-white">ค้างดำเนินการ</span>
                 <span className="font-semibold text-slate-800 dark:text-white">11%</span>
               </div>
@@ -114,19 +140,19 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-900 dark:text-white">
+      <div className="p-5 mt-6 bg-white border shadow-sm rounded-2xl border-slate-200 dark:bg-slate-900 dark:text-white">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between ">
           <div>
             <h3 className="text-lg font-semibold text-slate-800 dark:text-white">สรุปตามสาขา</h3>
             <p className="mt-1 text-sm text-slate-500 dark:text-white">รายการตัวอย่างสำหรับต่อยอดไปยังข้อมูลจริงจาก API</p>
           </div>
-          <button className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:text-white dark:hover:bg-slate-500">
+          <button className="px-4 py-2 text-sm font-medium transition border rounded-xl border-slate-300 text-slate-700 hover:bg-slate-50 dark:text-white dark:hover:bg-slate-500">
             ดูทั้งหมด
           </button>
         </div>
 
         <div className="mt-5 overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
+          <table className="min-w-full text-sm text-left">
             <thead>
               <tr className="border-b border-slate-200 text-slate-500">
                 <th className="px-4 py-3 font-medium dark:text-white">สาขา</th>

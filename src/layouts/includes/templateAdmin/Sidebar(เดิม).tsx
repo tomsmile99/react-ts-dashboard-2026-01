@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   LayoutDashboard,
   UserCog,
@@ -17,6 +17,8 @@ type SidebarProps = {
   collapsed: boolean;
   mobileOpen: boolean;
   setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  hoverExpanded: boolean;
+  setHoverExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type SubMenuItem = {
@@ -35,7 +37,7 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { name: "Dashboard", path: "/Admin/DashBoard", icon: LayoutDashboard },
   {
-    name: "จัดการระบบ",
+    name: "จัดการผู้ใช้ระบบ",
     icon: UserCog,
     children: [
       { name: "Users", path: "/Admin/Users", icon: Users },
@@ -44,7 +46,7 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
-    name: "รายงาน",
+    name: "รายงานระบบ",
     icon: FileText,
     children: [
       { name: "Reports", path: "/Admin/Reports", icon: FileText },
@@ -53,13 +55,18 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
+const Sidebar = ({
+  collapsed,
+  mobileOpen,
+  setMobileOpen,
+  hoverExpanded,
+  setHoverExpanded,
+}: SidebarProps) => {
   const location = useLocation();
   const [manualOpen, setManualOpen] = useState<Record<string, boolean>>({});
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // useEffect(() => {
-  //   setMobileOpen(false);
-  // }, [location.pathname, setMobileOpen]);
+  const expanded = !collapsed || hoverExpanded || mobileOpen;
 
   const routeOpenMenus = menuItems.reduce((acc, item) => {
     if (item.children?.some((child) => location.pathname.startsWith(child.path))) {
@@ -74,10 +81,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
 
   const toggleMenu = (menuName: string) => {
     setManualOpen((prev) => {
-      const current =
-        prev[menuName] ??
-        routeOpenMenus[menuName] ??
-        false;
+      const current = prev[menuName] ?? routeOpenMenus[menuName] ?? false;
 
       return {
         ...prev,
@@ -95,6 +99,27 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
     return item.children?.some((child) => location.pathname.startsWith(child.path)) ?? false;
   };
 
+  const showText = expanded;
+  const showChevron = showText;
+
+  const handleMouseEnter = () => {
+    if (!collapsed || mobileOpen) return;
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
+    setHoverExpanded(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!collapsed || mobileOpen) return;
+
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoverExpanded(false);
+    }, 120);
+  };
+
   return (
     <>
       <div
@@ -103,10 +128,11 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
           mobileOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
       />
-
       <aside
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className={`fixed left-0 top-0 z-50 flex h-screen flex-col bg-white text-slate-800 dark:bg-slate-900 dark:text-white transition-all duration-300 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
-          collapsed ? "lg:w-24" : "lg:w-58"
+          expanded ? "lg:w-58" : "lg:w-24"
         } ${
           mobileOpen ? "translate-x-0 w-72" : "-translate-x-full w-72"
         }`}
@@ -117,12 +143,13 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
               <span className="text-xl">S</span>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 dark:text-white">
+              <h3 className="flex font-bold justify-starttext-sm text-slate-800 dark:text-white">
                 SAK Dashboard
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-300">
                 ระบบบริหารจัดการข้อมูล
               </p>
+              <hr />
             </div>
           </div>
 
@@ -134,14 +161,9 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
             <X className="w-5 h-5" />
           </button>
         </div>
+
         <div className="hidden px-4 py-3 lg:block">
-          {collapsed ? (
-            <div className="flex justify-center">
-              <div className="flex items-center justify-center w-12 h-12 text-sm font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
-                <span className="text-2xl">S</span>
-              </div>
-            </div>
-          ) : (
+          {expanded ? (
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-12 h-12 text-base font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
                 <span className="text-2xl">S</span>
@@ -154,7 +176,13 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
                 <p className="mt-0.5 text-xs text-slate-500 dark:text-white justify-start flex">
                   ระบบบริหารจัดการข้อมูล
                 </p>
-                <hr></hr>
+                <hr />
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <div className="flex items-center justify-center w-12 h-12 text-sm font-bold text-blue-400 bg-blue-100 shadow-md rounded-2xl">
+                <span className="text-2xl">S</span>
               </div>
             </div>
           )}
@@ -163,12 +191,8 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
         <nav className="flex-1 min-h-0 px-2 py-3 overflow-y-auto sidebar-scroll">
           <div className="space-y-1">
             {menuItems.map((item) => {
-              const showText = !collapsed || mobileOpen;
-              const showChevron = showText;
-
               if (!item.children) {
                 const Icon = item.icon;
-
                 return (
                   <NavLink
                     key={item.path}
@@ -182,7 +206,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
                               ? "text-blue-400 bg-blue-100 shadow-sm"
                               : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                           }`
-                        : "group flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium transition cursor-pointer"
+                        : "group flex items-center justify-center rounded-2xl text-sm font-medium transition cursor-pointer"
                     }
                   >
                     {showText ? (
@@ -211,7 +235,58 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
 
               return (
                 <div key={item.name} className="space-y-1">
+
                   <button
+                    type="button"
+                    onClick={() => {
+                      if (!showText) return;
+                      toggleMenu(item.name);
+                    }}
+                    title={!showText ? item.name : ""}
+                    className={
+                      showText
+                        ? `cursor-pointer group flex w-full items-center justify-between rounded-2xl px-3 py-3 text-sm font-medium transition ${
+                            parentActive
+                              ? "text-blue-400 bg-blue-100 shadow-sm"
+                              : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                          }`
+                        : "cursor-pointer group flex w-full items-center justify-center rounded-2xl text-sm font-medium transition"
+                    }
+                  >
+                    {showText ? (
+                      <>
+                        <div className="flex items-center gap-3">
+                          {ParentIcon && (
+                            <ParentIcon className="w-5 h-5 transition shrink-0 group-hover:scale-105" />
+                          )}
+                          <span className="truncate">{item.name}</span>
+                        </div>
+
+                        {showChevron && (
+                          <ChevronDown
+                            className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
+                              menuOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div
+                        className={`flex items-center justify-center w-12 h-12 rounded-2xl transition ${
+                          parentActive
+                            ? "bg-blue-100 text-blue-400 shadow-sm"
+                            : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        {ParentIcon && (
+                          <ParentIcon className="w-5 h-5 transition shrink-0 group-hover:scale-105" />
+                        )}
+                      </div>
+                    )}
+                  </button>
+
+
+                  {/* <button
                     type="button"
                     onClick={() => {
                       if (!showText) return;
@@ -241,7 +316,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
                         }`}
                       />
                     )}
-                  </button>
+                  </button> */}
 
                   {showText && (
                     <div
