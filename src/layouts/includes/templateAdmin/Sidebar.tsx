@@ -19,6 +19,17 @@ import {
   Ruler,
   LocateFixed,
   MonitorSmartphone,
+  ScrollText,
+  Smartphone,
+  Layers,
+  Image,
+  Component,
+  MousePointerClick,
+  CreditCard,
+  BadgeCheck,
+  AlertTriangle,
+  CircleUserRound,
+  FolderKanban,
 } from "lucide-react";
 
 type SidebarProps = {
@@ -82,6 +93,27 @@ const menuGroups: MenuGroup[] = [
           { name: "Spacing Utilities", path: "/Admin/Layout/PageSpacingUtilities", icon: TextAlignEnd },
           { name: "Position Utilities", path: "/Admin/Layout/PagePositionUtilities", icon: LocateFixed },
           { name: "Display Utilities", path: "/Admin/Layout/PageDisplayUtilities", icon: MonitorSmartphone },
+          { name: "Overflow Utilities", path: "/Admin/Layout/PageOverflowUtilities", icon: ScrollText },
+          { name: "Responsive Breakpoints", path: "/Admin/Layout/PageResponsiveBreakpoints", icon: Smartphone },
+          { name: "Z-Index & Visibility", path: "/Admin/Layout/PageZIndexVisibility", icon: Layers },
+          { name: "Aspect Ratio & Object", path: "/Admin/Layout/PageAspectRatioObjectFit", icon: Image }
+        ],
+      },
+    ],
+  },
+  {
+    title: "UI",
+    items: [
+      {
+        name: "UI Components",
+        icon: Component,
+        children: [
+          { name: "Buttons", path: "/Admin/UI/PageButtons", icon: MousePointerClick },
+          { name: "Cards", path: "/Admin/UI/PageCards", icon: CreditCard },
+          { name: "Badges", path: "/Admin/UI/PageBadges", icon: BadgeCheck },
+          { name: "Alerts", path: "/Admin/UI/PageAlerts", icon: AlertTriangle },
+          { name: "Avatars", path: "/Admin/UI/PageAvatars", icon: CircleUserRound },
+          { name: "Tabs", path: "/Admin/UI/PageTabs", icon: FolderKanban },
         ],
       },
     ],
@@ -362,7 +394,7 @@ const Sidebar = ({
                           <div
                             className={`overflow-hidden transition-all duration-300 ease-in-out ${
                               menuOpen
-                                ? "mt-1 max-h-96 opacity-100 translate-y-0"
+                                ? "mt-1 max-h-[1000px] opacity-100 translate-y-0"
                                 : "max-h-0 opacity-0 -translate-y-1"
                             }`}
                           >
@@ -419,7 +451,6 @@ const Sidebar = ({
             </div>
           </nav>
         </aside>
-      
     </>
   );
 };

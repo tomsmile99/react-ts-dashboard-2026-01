@@ -36,34 +36,34 @@ const PageContainers = () => {
         </div>
       </div>
       <div className="w-full pb-2">
-        <div className="space-y-6">
-          {/* Container */}
-          <div>
-            <h3 className="mb-2 text-lg font-semibold">Container</h3>
-            <div className="container px-4 py-4 mx-auto bg-blue-100 rounded-lg">
-              container (responsive fixed width)
+        <div className="space-y-5">
+          <section className="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
+            {/* Container */}
+            <div>
+              <h3 className="mb-2 text-lg font-semibold">Container</h3>
+              <div className="container px-4 py-4 mx-auto bg-blue-100 rounded-lg">
+                container (responsive fixed width)
+              </div>
             </div>
-          </div>
 
-          {/* Container Fluid */}
-          <div>
-            <h3 className="mb-2 text-lg font-semibold">Container Fluid</h3>
-            <div className="w-full px-4 py-4 bg-green-100 rounded-lg">
-              container-fluid (full width)
+            {/* Container Fluid */}
+            <div>
+              <h3 className="mb-2 text-lg font-semibold">Container Fluid</h3>
+              <div className="w-full px-4 py-4 bg-green-100 rounded-lg">
+                container-fluid (full width)
+              </div>
             </div>
-          </div>
 
-          {/* Custom Container */}
-          <div>
-            <h3 className="mb-2 text-lg font-semibold">Custom Container</h3>
-            <div className="max-w-5xl px-4 py-4 mx-auto bg-purple-100 rounded-lg">
-              max-w-5xl (custom width)
+            {/* Custom Container */}
+            <div>
+              <h3 className="mb-2 text-lg font-semibold">Custom Container</h3>
+              <div className="max-w-5xl px-4 py-4 mx-auto bg-purple-100 rounded-lg">
+                max-w-5xl (custom width)
+              </div>
             </div>
-          </div>
+          </section>
         </div>
-        
       </div>
-      
     </>
   )
 }

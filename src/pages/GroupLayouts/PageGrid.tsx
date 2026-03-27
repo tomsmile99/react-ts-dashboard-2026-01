@@ -36,7 +36,7 @@ const PageGrid = () => {
         </div>
       </div>
       <div className="w-full pb-2">
-        <div className="space-y-8">
+        <div className="space-y-5">
           <section className="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
             <h2 className="mb-4 text-lg font-semibold text-slate-800">Basic Grid</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -77,9 +77,7 @@ const PageGrid = () => {
             </div>
           </section>
         </div>
-        
       </div>
-      
     </>
   )
 }
