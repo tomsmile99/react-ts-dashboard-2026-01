@@ -18,7 +18,7 @@ function StatCard({ title, value, subtitle }: StatCardProps) {
 }
 
 
-const DashboardPage = () => {
+const PageDashboard = () => {
 
   type TableRow = {
     id: number;
@@ -180,4 +180,4 @@ const DashboardPage = () => {
   )
 }
 
-export default DashboardPage
+export default PageDashboard
