@@ -6,6 +6,8 @@ const sectionCard =
 
 const contentBox =
   "rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600";
+
+  
 const PageTabs = () => {
 
   const [basicTab, setBasicTab] = useState("overview");
@@ -46,7 +48,7 @@ const PageTabs = () => {
           <div>
             {/* Title */}
             <span className="flex justify-start p-3 text-lg text-gray-800 sm:text-xl md:text-2xl">
-              Avatars
+              Tabs
             </span>
 
             {/* Breadcrumb */}
@@ -60,7 +62,7 @@ const PageTabs = () => {
               </span>
               <span className="mx-2">•</span>
               <span className="text-gray-700">
-                Avatars
+                Tabs
               </span>
             </div>
           </div>

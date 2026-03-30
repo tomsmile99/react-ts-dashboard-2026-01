@@ -19,6 +19,11 @@ import PageBadges from "./pages/GroupUIComponents/PageBadges";
 import PageAlerts from "./pages/GroupUIComponents/PageAlerts";
 import PageAvatars from "./pages/GroupUIComponents/PageAvatars";
 import PageTabs from "./pages/GroupUIComponents/PageTabs";
+import PageAccordion from "./pages/GroupUIComponents/PageAccordion";
+import PageModals from "./pages/GroupUIComponents/PageModals";
+import PageDropdowns from "./pages/GroupUIComponents/PageDropdowns";
+import PageTables from "./pages/GroupUIComponents/PageTables";
+import PageForms from "./pages/GroupUIComponents/PageForms";
 
 
 export default function App() {
@@ -50,6 +55,11 @@ export default function App() {
             <Route path="/Admin/UI/PageAlerts" element={<PageAlerts/>}/>
             <Route path="/Admin/UI/PageAvatars" element={<PageAvatars/>}/>
             <Route path="/Admin/UI/PageTabs" element={<PageTabs/>}/>
+            <Route path="/Admin/UI/PageAccordion" element={<PageAccordion/>}/>
+            <Route path="/Admin/UI/PageModals" element={<PageModals/>}/>
+            <Route path="/Admin/UI/PageDropdowns" element={<PageDropdowns/>}/>
+            <Route path="/Admin/UI/PageTables" element={<PageTables/>}/>
+            <Route path="/Admin/UI/PageForms" element={<PageForms/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

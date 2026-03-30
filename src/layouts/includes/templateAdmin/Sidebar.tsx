@@ -30,6 +30,11 @@ import {
   AlertTriangle,
   CircleUserRound,
   FolderKanban,
+  Rows3,
+  SquareDashedBottomCode,
+  Filter,
+  Table,
+  Form,
 } from "lucide-react";
 
 type SidebarProps = {
@@ -114,6 +119,11 @@ const menuGroups: MenuGroup[] = [
           { name: "Alerts", path: "/Admin/UI/PageAlerts", icon: AlertTriangle },
           { name: "Avatars", path: "/Admin/UI/PageAvatars", icon: CircleUserRound },
           { name: "Tabs", path: "/Admin/UI/PageTabs", icon: FolderKanban },
+          { name: "Accordion", path: "/Admin/UI/PageAccordion", icon: Rows3 },
+          { name: "Modals", path: "/Admin/UI/PageModals", icon: SquareDashedBottomCode },
+          { name: "Dropdowns", path: "/Admin/UI/PageDropdowns", icon: Filter },
+          { name: "Tables", path: "/Admin/UI/PageTables", icon: Table },
+          { name: "Forms", path: "/Admin/UI/PageForms", icon: Form },
         ],
       },
     ],
