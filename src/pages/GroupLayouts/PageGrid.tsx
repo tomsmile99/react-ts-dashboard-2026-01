@@ -1,6 +1,6 @@
 
 import { LayoutPanelTop } from "lucide-react"
-
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
 
 const PageGrid = () => {
   return (
@@ -16,17 +16,14 @@ const PageGrid = () => {
 
             {/* Breadcrumb */}
             <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2">•</span>
-              <span className="cursor-pointer">
-                Layout
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-700">
-                Grid system
-              </span>
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "Layout" },
+                  { label: "Grid system", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}

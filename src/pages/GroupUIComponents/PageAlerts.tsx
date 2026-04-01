@@ -6,6 +6,8 @@ import {
   X,
 } from "lucide-react";
 
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
+
 const sectionCard =
   "p-5 bg-white border border-slate-200 rounded-2xl shadow-sm";
 
@@ -21,20 +23,16 @@ const PageAlerts = () => {
             <span className="flex justify-start p-3 text-lg text-gray-800 sm:text-xl md:text-2xl">
               Alerts
             </span>
-
             {/* Breadcrumb */}
             <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2">•</span>
-              <span className="cursor-pointer">
-                UI Components
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-700">
-                Alerts
-              </span>
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "UI Components" },
+                  { label: "Alerts", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}

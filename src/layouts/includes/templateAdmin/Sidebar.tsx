@@ -35,6 +35,8 @@ import {
   Filter,
   Table,
   Form,
+  MapPlus,
+  Columns3,
 } from "lucide-react";
 
 type SidebarProps = {
@@ -124,6 +126,8 @@ const menuGroups: MenuGroup[] = [
           { name: "Dropdowns", path: "/Admin/UI/PageDropdowns", icon: Filter },
           { name: "Tables", path: "/Admin/UI/PageTables", icon: Table },
           { name: "Forms", path: "/Admin/UI/PageForms", icon: Form },
+          { name: "Breadcrumbs", path: "/Admin/UI/PageBreadcrumbs", icon: MapPlus },
+          { name: "Pagination", path: "/Admin/UI/PagePagination", icon: Columns3 },
         ],
       },
     ],
@@ -230,7 +234,7 @@ const Sidebar = ({
         <aside
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`sidebar-shell left-0 top-0 z-50 flex h-screen flex-col
+          className={`sidebar-shell fixed left-0 top-0 z-50 flex h-screen flex-col
           bg-white text-slate-800 dark:bg-slate-900 dark:text-white
           transition-all duration-300 ease-in-out
           lg:fixed lg:left-0 lg:top-0 shadow-[4px_0_12px_rgba(0,0,0,0.08)] dark:shadow-[4px_0_12px_rgba(0,0,0,0.4)]
@@ -255,7 +259,7 @@ const Sidebar = ({
                   SAK Dashboard
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-300">
-                  ระบบบริหารจัดการข้อมูล
+                  ระบบจัดการเทมเพลต
                 </p>
                 <hr />
               </div>
@@ -282,7 +286,7 @@ const Sidebar = ({
                     SAK Dashboard
                   </h3>
                   <p className="mt-0.5 text-xs text-slate-500 dark:text-white justify-start flex">
-                    ระบบบริหารจัดการข้อมูล
+                    ระบบจัดการเทมเพลต
                   </p>
                   <hr />
                 </div>

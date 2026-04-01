@@ -1,5 +1,5 @@
 import { MonitorSmartphone } from "lucide-react"
-
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
 const PageDisplayUtilities = () => {
 
   const sectionCard =
@@ -25,17 +25,14 @@ const PageDisplayUtilities = () => {
 
             {/* Breadcrumb */}
             <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2">•</span>
-              <span className="cursor-pointer">
-                Layout
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-700">
-                Display Utilities
-              </span>
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "Layout" },
+                  { label: "Display Utilities", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}

@@ -1,6 +1,6 @@
 
 import { Users } from "lucide-react"
-
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
 
 const UsersPage = () => {
   return (
@@ -12,18 +12,16 @@ const UsersPage = () => {
             <span className="flex justify-start p-3 text-2xl text-gray-800">
               Users
             </span>
-            <div className="mb-3 ml-3 text-sm text-gray-500">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2 text-sm">•</span>
-              <span className="cursor-pointe">
-                จัดการระบบ
-              </span>
-              <span className="mx-2 text-sm">•</span>
-              <span className="text-gray-700">
-                Users
-              </span>
+            {/* Breadcrumb */}
+            <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "จัดการระบบ" },
+                  { label: "Users", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}

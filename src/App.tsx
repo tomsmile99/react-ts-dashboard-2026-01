@@ -24,6 +24,8 @@ import PageModals from "./pages/GroupUIComponents/PageModals";
 import PageDropdowns from "./pages/GroupUIComponents/PageDropdowns";
 import PageTables from "./pages/GroupUIComponents/PageTables";
 import PageForms from "./pages/GroupUIComponents/PageForms";
+import PageBreadcrumbs from "./pages/GroupUIComponents/PageBreadcrumbs";
+import PagePagination from "./pages/GroupUIComponents/PagePagination";
 
 
 export default function App() {
@@ -60,6 +62,8 @@ export default function App() {
             <Route path="/Admin/UI/PageDropdowns" element={<PageDropdowns/>}/>
             <Route path="/Admin/UI/PageTables" element={<PageTables/>}/>
             <Route path="/Admin/UI/PageForms" element={<PageForms/>}/>
+            <Route path="/Admin/UI/PageBreadcrumbs" element={<PageBreadcrumbs/>}/>
+            <Route path="/Admin/UI/PagePagination" element={<PagePagination/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

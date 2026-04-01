@@ -7,6 +7,8 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
+
 const PageCards = () => {
 
   const sectionCard =
@@ -29,17 +31,14 @@ const PageCards = () => {
 
             {/* Breadcrumb */}
             <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2">•</span>
-              <span className="cursor-pointer">
-                UI Components
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-700">
-                Cards
-              </span>
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "UI Components" },
+                  { label: "Cards", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}

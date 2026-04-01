@@ -1,5 +1,5 @@
 import { Image } from "lucide-react";
-
+import { Breadcrumbs } from "@/pages/GroupUIComponents/Components/Breadcrumbs/index";
 
 const PageAspectRatioObjectFit = () => {
 
@@ -16,20 +16,16 @@ const PageAspectRatioObjectFit = () => {
             <span className="flex justify-start p-3 text-lg text-gray-800 sm:text-xl md:text-2xl">
               Aspect Ratio & Object Fit
             </span>
-
             {/* Breadcrumb */}
             <div className="mb-3 ml-3 text-xs text-gray-500 sm:text-sm">
-              <span className="cursor-pointer hover:text-blue-500">
-                ระบบบริหารจัดการข้อมูล
-              </span>
-              <span className="mx-2">•</span>
-              <span className="cursor-pointer">
-                Layout
-              </span>
-              <span className="mx-2">•</span>
-              <span className="text-gray-700">
-                Aspect Ratio & Object Fit
-              </span>
+              <Breadcrumbs
+                showHome
+                //homeLabel="Dashboard"
+                items={[
+                  { label: "Layout" },
+                  { label: "Aspect Ratio & Object Fit", current: true },
+                ]}
+              />
             </div>
           </div>
           {/* ฝั่งขวา */}
