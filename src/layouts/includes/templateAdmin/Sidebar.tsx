@@ -37,6 +37,20 @@ import {
   Form,
   MapPlus,
   Columns3,
+  WandSparkles,
+  PanelsTopLeft,
+  PanelTop,
+  Diamond,
+  WalletCards,
+  BatteryMedium,
+  ChartColumn,
+  ChartNoAxesGantt as TimelineIcon,
+  SquareMousePointer,
+  Pill,
+  SquareActivity,
+  MonitorCog,
+  SendToBack,
+  ChartPie
 } from "lucide-react";
 
 type SidebarProps = {
@@ -126,9 +140,40 @@ const menuGroups: MenuGroup[] = [
           { name: "Dropdowns", path: "/Admin/UI/PageDropdowns", icon: Filter },
           { name: "Tables", path: "/Admin/UI/PageTables", icon: Table },
           { name: "Forms", path: "/Admin/UI/PageForms", icon: Form },
+          { name: "Forms Advanced", path: "/Admin/UI/PageFormsAdvanced", icon: FileText },
           { name: "Breadcrumbs", path: "/Admin/UI/PageBreadcrumbs", icon: MapPlus },
           { name: "Pagination", path: "/Admin/UI/PagePagination", icon: Columns3 },
+          { name: "Steps Wizard", path: "/Admin/UI/PageStepsWizard", icon: WandSparkles },
+          { name: "NavbarTop", path: "/Admin/UI/PageNavbar", icon: PanelsTopLeft },
+          { name: "Header", path: "/Admin/UI/PageHeader", icon: PanelTop },
+          
         ],
+      },
+      {
+        name: "Data Display",
+        icon: MonitorCog,
+        children: [
+          { name: "KPI Card", path: "/Admin/UI/PageKPICard", icon: Diamond },
+          { name: "Stats Card", path: "/Admin/UI/PageStatsCard", icon: WalletCards },
+          { name: "Progress Bar", path: "/Admin/UI/PageProgressBar", icon: BatteryMedium },
+          { name: "Charts Wrapper", path: "/Admin/UI/PageChartsWrapper", icon: ChartColumn },
+          { name: "Time Line", path: "/Admin/UI/PageTimeline", icon: TimelineIcon },
+          { name: "Empty State", path: "/Admin/UI/PageEmptyState", icon: SquareMousePointer },
+          { name: "Descriptions", path: "/Admin/UI/PageDescriptions", icon: Pill },
+          { name: "ActivityFeed", path: "/Admin/UI/PageActivityFeed", icon: SquareActivity },
+          { name: "Metric Cards", path: "/Admin/UI/PageMetricCards", icon: Box },
+          
+        ],
+      },
+    ],
+  },
+  {
+    title: "Overlay / Feedback",
+    items: [
+      {
+        name: "Overlay / Feedback",
+        path: "/Admin/UI/PageOverlayFeedback",
+        icon: SendToBack,
       },
     ],
   },
@@ -137,9 +182,9 @@ const menuGroups: MenuGroup[] = [
     items: [
       {
         name: "รายงานระบบ",
-        icon: FileText,
+        icon: ChartPie,
         children: [
-          { name: "Reports", path: "/Admin/Reports", icon: FileText },
+          { name: "Reports", path: "/Admin/Reports", icon: ChartPie },
           { name: "Monthly", path: "/Admin/Reports/Monthly", icon: CalendarDays },
         ],
       },

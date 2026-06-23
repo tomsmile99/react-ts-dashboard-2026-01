@@ -7,5 +7,7 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    equire("@tailwindcss/typography")
+  ],
 }

@@ -246,7 +246,7 @@ const PageCards = () => {
                 </div>
               </div>
 
-              <div className="p-6 text-white border shadow-sm rounded-2xl border-slate-200 bg-gradient-to-br from-slate-900 to-slate-700">
+              <div className="p-6 text-white border shadow-sm rounded-2xl border-slate-200 bg-linear-to-br from-slate-900 to-slate-700">
                 <p className="text-sm text-slate-300">Premium Member</p>
                 <h3 className="mt-2 text-xl font-semibold">Business Account</h3>
                 <p className="mt-3 text-sm text-slate-300">
